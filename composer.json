@@ -1,13 +1,13 @@
 {
-    "name": "morelmj/php-formula-interpreter",
+    "name": "mormat/php-formula-interpreter",
     "description": "Formula interpreter for PHP",
     "keywords": ["php"],
     "license": "MIT",
     
     "authors": [
         {
-            "name":      "M.J. Morel",
-            "email":     "morelmathieujean@gmail.com"
+            "name":      "mormat",
+            "email":     "mormat@free.fr"
         }
     ],
 
@@ -17,7 +17,7 @@
 
     "autoload": {
         "psr-0": {
-            "Morelmj": "src/"
+            "FormulaInterpreter": "src/"
         }
     },
 
