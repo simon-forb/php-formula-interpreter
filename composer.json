@@ -1,0 +1,26 @@
+{
+    "name": "morelmj/php-formula-interpreter",
+    "description": "Formula interpreter for PHP",
+    "keywords": ["php"],
+    "license": "MIT",
+    
+    "authors": [
+        {
+            "name":      "M.J. Morel",
+            "email":     "morelmathieujean@gmail.com"
+        }
+    ],
+
+    "require-dev": {
+        "symfony/class-loader": "2.1.*"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Morelmj": "src/"
+        }
+    },
+
+    "minimum-stability": "dev"
+
+}
