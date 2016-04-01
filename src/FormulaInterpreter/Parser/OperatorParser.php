@@ -28,9 +28,9 @@ class OperatorParser implements ParserInterface {
         $expression = trim($expression);
         
         if ($this->hasOperator($expression, '+') | $this->hasOperator($expression, '-')) {
-            return $this->doSomething($expression, array('+', '-'));
+            return $this->searchOperands($expression, array('+', '-'));
         } elseif ($this->hasOperator($expression, '*') | $this->hasOperator($expression, '/')) {
-            return $this->doSomething($expression, array('*', '/'));
+            return $this->searchOperands($expression, array('*', '/'));
         }
         
         throw new ParserException($expression);
@@ -59,7 +59,7 @@ class OperatorParser implements ParserInterface {
         return false;
     }
     
-    function doSomething($expression, $operators) {
+    function searchOperands($expression, $operators) {
         $operands = array();
         $nbrCharacters = strlen($expression);
         
@@ -78,7 +78,7 @@ class OperatorParser implements ParserInterface {
                     break;
                 default:
                     if (in_array($expression[$i], $operators) && $parenthesis == 0) {
-                        $operands[] = $this->doThat(
+                        $operands[] = $this->createOperand(
                             substr($expression, $previous, $i - $previous), 
                             $lastOperator
                         );
@@ -96,7 +96,7 @@ class OperatorParser implements ParserInterface {
             
         }
         
-        $operands[] = $this->doThat(
+        $operands[] = $this->createOperand(
                 substr($expression, $previous, strlen($expression) - $previous), 
                 $lastOperator
         );
@@ -110,20 +110,20 @@ class OperatorParser implements ParserInterface {
         );
     }
     
-    function doThat($value, $operator = null) {
-        $machin = array();
+    function createOperand($value, $operator = null) {
+        $operand = array();
         switch ($operator) {
             case '+':
-                $machin['operator'] = 'add';
+                $operand['operator'] = 'add';
                 break;
             case '-':
-                $machin['operator'] = 'subtract';
+                $operand['operator'] = 'subtract';
                 break;
             case '*':
-                $machin['operator'] = 'multiply';
+                $operand['operator'] = 'multiply';
                 break;
             case '/':
-                $machin['operator'] = 'divide';
+                $operand['operator'] = 'divide';
                 break;
         }
         
@@ -141,8 +141,8 @@ class OperatorParser implements ParserInterface {
         }
 
         
-        $machin['value'] = $this->operandParser->parse($value);
-        return $machin;
+        $operand['value'] = $this->operandParser->parse($value);
+        return $operand;
     }
     
 }

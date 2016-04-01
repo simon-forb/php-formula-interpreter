@@ -26,15 +26,15 @@ class OperatorParserTest extends PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @dataProvider getMachinChose
+     * @dataProvider getDataForTestingParse
      */
-    public function testMachinChose($expression, $infos) {
+    public function testParse($expression, $infos) {
         $infos['type'] = 'operation';
         
         $this->assertEquals($this->parser->parse($expression), $infos);
     }
     
-    public function getMachinChose() {
+    public function getDataForTestingParse() {
         
         return array(
             array('2+2', array(
