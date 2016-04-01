@@ -40,6 +40,9 @@ class CompilerTest extends PHPUnit_Framework_TestCase {
             array('sqrt(4)', 2),
             array('pow(sqrt(pow(2, 2)), 2)', 4),
             
+            // Issue #4
+            array('(((100 * 0.43075) * 1.1 * 1.5) / (1-0.425)) * 1.105', 136.5852065217), 
+            array('1+(1+1)', 3),
         );
     }
     

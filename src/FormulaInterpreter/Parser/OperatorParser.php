@@ -27,10 +27,6 @@ class OperatorParser implements ParserInterface {
 
         $expression = trim($expression);
         
-        if ($expression[0] == '(' && substr($expression, -1, 1) == ')') {
-            $expression = substr($expression, 1, -1);
-        }
-        
         if ($this->hasOperator($expression, '+') | $this->hasOperator($expression, '-')) {
             return $this->doSomething($expression, array('+', '-'));
         } elseif ($this->hasOperator($expression, '*') | $this->hasOperator($expression, '/')) {
@@ -65,12 +61,13 @@ class OperatorParser implements ParserInterface {
     
     function doSomething($expression, $operators) {
         $operands = array();
+        $nbrCharacters = strlen($expression);
         
         $parenthesis = 0;
         
         $previous = 0;
         $lastOperator = null;
-        for ($i = 0; $i < strlen($expression); $i++) {
+        for ($i = 0; $i < $nbrCharacters; $i++) {
             
             switch ($expression[$i]) {
                 case '(':
@@ -86,8 +83,14 @@ class OperatorParser implements ParserInterface {
                             $lastOperator
                         );
                         $lastOperator = $expression[$i];
-                        $i++;
-                        $previous = $i;
+                        
+                        if ($i+1 < $nbrCharacters && $expression[$i+1] != '(') {
+                            $i++;
+                            $previous = $i;
+                        } else {
+                            $previous = $i+1;
+                        }
+                        
                     }                    
             }
             
@@ -129,6 +132,7 @@ class OperatorParser implements ParserInterface {
         if ($value != '') {
             if ($value[0] == '(' && substr($value, -1, 1) == ')') {
                 $value = substr($value, 1, -1);
+                $value = trim($value);
             }
         }
 

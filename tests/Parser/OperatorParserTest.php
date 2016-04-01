@@ -93,6 +93,12 @@ class OperatorParserTest extends PHPUnit_Framework_TestCase {
                                 array('operator' => 'multiply', 'value' => '3+2'),
                             )
                          )),
+            array('4+( 3+2 ) ', array(
+                            'firstOperand' => '4',
+                            'otherOperands' => array(
+                                array('operator' => 'add', 'value' => '3+2'),
+                            )
+                         )),
         );
     }
     
