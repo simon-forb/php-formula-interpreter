@@ -12,14 +12,14 @@ use FormulaInterpreter\Command\OperationCommand;
  *
  * @author mathieu
  */
-class OperationCommandTest extends PHPUnit_Framework_TestCase {
+class OperationCommandTest extends \PHPUnit\Framework\TestCase {
 
     /**
      *
      */
     public function testRunWithOneOperand() {
 
-        $firstOperand = $this->getMockCommand(12);
+        $firstOperand = $this->createMockCommand(12);
 
         $command = new OperationCommand($firstOperand);
 
@@ -31,10 +31,10 @@ class OperationCommandTest extends PHPUnit_Framework_TestCase {
      */
     public function testRunWithAddition() {
 
-        $firstOperand = $this->getMockCommand(2);
+        $firstOperand = $this->createMockCommand(2);
         $command = new OperationCommand($firstOperand);
 
-        $operand = $this->getMockCommand(2);
+        $operand = $this->createMockCommand(2);
         $command->addOperand(OperationCommand::ADD_OPERATOR, $operand);
 
         $this->assertEquals($command->run(), 4);
@@ -45,10 +45,10 @@ class OperationCommandTest extends PHPUnit_Framework_TestCase {
      */
     public function testRunWithMultplication() {
 
-        $firstOperand = $this->getMockCommand(3);
+        $firstOperand = $this->createMockCommand(3);
         $command = new OperationCommand($firstOperand);
 
-        $operand = $this->getMockCommand(2);
+        $operand = $this->createMockCommand(2);
         $command->addOperand(OperationCommand::MULTIPLY_OPERATOR, $operand);
 
         $this->assertEquals($command->run(), 6);
@@ -59,10 +59,10 @@ class OperationCommandTest extends PHPUnit_Framework_TestCase {
      */
     public function testRunWithSubstraction() {
 
-        $firstOperand = $this->getMockCommand(2);
+        $firstOperand = $this->createMockCommand(2);
         $command = new OperationCommand($firstOperand);
 
-        $operand = $this->getMockCommand(1);
+        $operand = $this->createMockCommand(1);
         $command->addOperand(OperationCommand::SUBTRACT_OPERATOR, $operand);
 
         $this->assertEquals($command->run(), 1);
@@ -73,10 +73,10 @@ class OperationCommandTest extends PHPUnit_Framework_TestCase {
      */
     public function testRunWithDivision() {
 
-        $firstOperand = $this->getMockCommand(6);
+        $firstOperand = $this->createMockCommand(6);
         $command = new OperationCommand($firstOperand);
 
-        $operand = $this->getMockCommand(2);
+        $operand = $this->createMockCommand(2);
         $command->addOperand(OperationCommand::DIVIDE_OPERATOR, $operand);
 
         $this->assertEquals($command->run(), 3);
@@ -88,21 +88,21 @@ class OperationCommandTest extends PHPUnit_Framework_TestCase {
      */
     public function testRunWithThreeOperands() {
 
-        $firstOperand = $this->getMockCommand(5);
+        $firstOperand = $this->createMockCommand(5);
         $command = new OperationCommand($firstOperand);
 
-        $operand = $this->getMockCommand(10);
+        $operand = $this->createMockCommand(10);
         $command->addOperand(OperationCommand::ADD_OPERATOR, $operand);
 
-        $operand = $this->getMockCommand(1);
+        $operand = $this->createMockCommand(1);
         $command->addOperand(OperationCommand::SUBTRACT_OPERATOR, $operand);
 
 
         $this->assertEquals($command->run(), 14);
     }
 
-    public function getMockCommand($returnValue) {
-        $command = $this->getMock('FormulaInterpreter\Command\CommandInterface');
+    public function createMockCommand($returnValue) {
+        $command = $this->createMock('FormulaInterpreter\Command\CommandInterface');
         $command->expects($this->any())
             ->method('run')
             ->will($this->returnValue($returnValue));

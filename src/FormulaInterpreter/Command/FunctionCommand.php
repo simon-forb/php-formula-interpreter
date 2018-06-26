@@ -12,13 +12,14 @@ namespace FormulaInterpreter\Command;
  *
  * @author mathieu
  */
-class FunctionCommand implements CommandInterface {
-
+class FunctionCommand implements CommandInterface
+{
     protected $callable;
 
-    protected $argumentCommands = array();
+    protected $argumentCommands = [];
 
-    function __construct($callable, $argumentCommands = array()) {
+    public function __construct($callable, $argumentCommands = [])
+    {
         if (!is_callable($callable)) {
             throw new \InvalidArgumentException();
         }
@@ -39,8 +40,9 @@ class FunctionCommand implements CommandInterface {
         $this->argumentCommands = $argumentCommands;
     }
 
-    public function run() {
-        $arguments = array();
+    public function run()
+    {
+        $arguments = [];
         foreach ($this->argumentCommands as $command) {
             $arguments[] = $command->run();
         }
@@ -55,14 +57,11 @@ class FunctionCommand implements CommandInterface {
                     array_map(function ($command) {
                         return $command->getParameters();
                     }, $this->argumentCommands),
-                    function ($x, $y){
+                    function ($x, $y) {
                         return array_merge($x, $y);
                     },
-                    array()
+                    []
                 )
             );
     }
-
 }
-
-?>

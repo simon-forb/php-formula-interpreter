@@ -12,7 +12,7 @@ use FormulaInterpreter\Command\FunctionCommand;
  *
  * @author mathieu
  */
-class FunctionCommandTest extends PHPUnit_Framework_TestCase {
+class FunctionCommandTest extends \PHPUnit\Framework\TestCase {
 
     public function testRunWithoutArguments() {
         $callable = function() {
@@ -29,11 +29,11 @@ class FunctionCommandTest extends PHPUnit_Framework_TestCase {
           return $arg;
         };
 
-        $argumentCommand = $this->getMock('\FormulaInterpreter\Command\CommandInterface');
+        $argumentCommand = $this->createMock('\FormulaInterpreter\Command\CommandInterface');
         $argumentCommand->expects($this->once())
                 ->method('run')
                 ->will($this->returnValue(4));
-        $command = new FunctionCommand($callable, array($argumentCommand));
+        $command = new FunctionCommand($callable, [$argumentCommand]);
 
         $this->assertEquals($command->run(), 4);
 
@@ -44,9 +44,9 @@ class FunctionCommandTest extends PHPUnit_Framework_TestCase {
           return $arg1 + $arg2;
         };
 
-        $argumentCommands = array();
-        foreach (array(2, 3) as $value) {
-            $argumentCommand = $this->getMock('\FormulaInterpreter\Command\CommandInterface');
+        $argumentCommands = [];
+        foreach ([2, 3] as $value) {
+            $argumentCommand = $this->createMock('\FormulaInterpreter\Command\CommandInterface');
             $argumentCommand->expects($this->any())
                     ->method('run')
                     ->will($this->returnValue($value));
@@ -74,7 +74,7 @@ class FunctionCommandTest extends PHPUnit_Framework_TestCase {
     public function testConstructWhenArgumentCommandDontImplementInterfaceCommand() {
         $callable = function($arg1) {};
 
-        $command = new FunctionCommand($callable, array('whatever'));
+        $command = new FunctionCommand($callable, ['whatever']);
     }
 
     /**

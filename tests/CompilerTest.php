@@ -13,12 +13,12 @@ use FormulaInterpreter\Parser\ParserException;
  *
  * @author mathieu
  */
-class CompilerTest extends PHPUnit_Framework_TestCase {
+class CompilerTest extends \PHPUnit\Framework\TestCase {
 
     /**
      * @dataProvider getCompileAndRunData
      */
-    public function testCompileAndRun($expression, $result, $variables = array()) {
+    public function testCompileAndRun($expression, $result, $variables = []) {
         $compiler = new Compiler();
 
         $executable = $compiler->compile($expression);
@@ -27,27 +27,27 @@ class CompilerTest extends PHPUnit_Framework_TestCase {
     }
 
     public function getCompileAndRunData() {
-        return array(
-            array('3', 3),
-            array('3 + 3', 6),
-            array('price', 10, array('price' => 10)),
-            array('price + 2 * 3', 16, array('price' => 10)),
-            array('pi()', pi()),
-            array('pow(3, 2)', 9),
-            array('modulo(5, 2)', 1),
-            array('cos(0)', 1),
-            array('sin(0)', 0),
-            array('sqrt(4)', 2),
-            array('pow(sqrt(pow(2, 2)), 2)', 4),
+        return [
+            ['3', 3],
+            ['3 + 3', 6],
+            ['price', 10, ['price' => 10]],
+            ['price + 2 * 3', 16, ['price' => 10]],
+            ['pi()', pi()],
+            ['pow(3, 2)', 9],
+            ['modulo(5, 2)', 1],
+            ['cos(0)', 1],
+            ['sin(0)', 0],
+            ['sqrt(4)', 2],
+            ['pow(sqrt(pow(2, 2)), 2)', 4],
 
             // Issue #4
-            array('(((100 * 0.43075) * 1.1 * 1.5) / (1-0.425)) * 1.105', 136.5852065217),
-            array('1+(1+1)', 3),
+            ['(((100 * 0.43075) * 1.1 * 1.5) / (1-0.425)) * 1.105', 136.5852065217],
+            ['1+(1+1)', 3],
 
             // Issue 8
-            array('pow(foo,bar)', 9, array('foo' => 3, 'bar' => 2)),
-            array('pow(foo, bar)', 9, array('foo' => 3, 'bar' => 2)),
-        );
+            ['pow(foo,bar)', 9, ['foo' => 3, 'bar' => 2]],
+            ['pow(foo, bar)', 9, ['foo' => 3, 'bar' => 2]],
+        ];
     }
 
     /**
@@ -64,22 +64,22 @@ class CompilerTest extends PHPUnit_Framework_TestCase {
 
     public function getCompileGetParametersData()
     {
-        return array(
-            array('3', array()),
-            array('3 + 3', array()),
-            array('price', array('price')),
-            array('price + 2 * 3', array('price')),
-            array('pi()', array()),
-            array('pow(3, 2)', array()),
-            array('modulo(5, 2)', array()),
-            array('cos(0)', array()),
-            array('sin(0)', array()),
-            array('sqrt(foo)', array('foo')),
-            array('foo', array('foo')),
-            array('foo + 1', array('foo')),
-            array('foo * bar', array('foo', 'bar')),
-            array('pow(foo, bar)', array('foo', 'bar')),
-            array('pow(sqrt(pow(foo, bar)), baz)', array('foo', 'bar', 'baz')),
-        );
+        return [
+            ['3', []],
+            ['3 + 3', []],
+            ['price', ['price']],
+            ['price + 2 * 3', ['price']],
+            ['pi()', []],
+            ['pow(3, 2)', []],
+            ['modulo(5, 2)', []],
+            ['cos(0)', []],
+            ['sin(0)', []],
+            ['sqrt(foo)', ['foo']],
+            ['foo', ['foo']],
+            ['foo + 1', ['foo']],
+            ['foo * bar', ['foo', 'bar']],
+            ['pow(foo, bar)', ['foo', 'bar']],
+            ['pow(sqrt(pow(foo, bar)), baz)', ['foo', 'bar', 'baz']],
+        ];
     }
 }

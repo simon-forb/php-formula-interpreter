@@ -12,15 +12,15 @@ use FormulaInterpreter\Parser\OperatorParser;
  *
  * @author mathieu
  */
-class OperatorParserTest extends PHPUnit_Framework_TestCase {
+class OperatorParserTest extends \PHPUnit\Framework\TestCase {
 
     public function setUp() {
 
-        $operandParser = $this->getMock('\FormulaInterpreter\Parser\ParserInterface');
+        $operandParser = $this->createMock('\FormulaInterpreter\Parser\ParserInterface');
         $operandParser
             ->expects($this->any())
             ->method('parse')
-            ->will($this->returnCallback(array($this, 'mockOperandParser')));
+            ->will($this->returnCallback([$this, 'mockOperandParser']));
 
         $this->parser = new OperatorParser($operandParser);
     }
@@ -36,70 +36,70 @@ class OperatorParserTest extends PHPUnit_Framework_TestCase {
 
     public function getDataForTestingParse() {
 
-        return array(
-            array('2+2', array(
+        return [
+            ['2+2', [
                             'firstOperand' => '2',
-                            'otherOperands' => array(
-                                array('operator' => 'add', 'value' => '2')
-                             )
-                         )),
-            array(' 2+2 ', array(
+                            'otherOperands' => [
+                                ['operator' => 'add', 'value' => '2']
+                             ]
+                         ]],
+            [' 2+2 ', [
                             'firstOperand' => '2',
-                            'otherOperands' => array(
-                                array('operator' => 'add', 'value' => '2')
-                             )
-                         )),
-            array('2-2', array(
+                            'otherOperands' => [
+                                ['operator' => 'add', 'value' => '2']
+                             ]
+                         ]],
+            ['2-2', [
                             'firstOperand' => '2',
-                            'otherOperands' => array(
-                                array('operator' => 'subtract', 'value' => '2')
-                            )
-                         )),
-            array('3+1-2', array(
+                            'otherOperands' => [
+                                ['operator' => 'subtract', 'value' => '2']
+                            ]
+                         ]],
+            ['3+1-2', [
                             'firstOperand' => '3',
-                            'otherOperands' => array(
-                                array('operator' => 'add', 'value' => '1'),
-                                array('operator' => 'subtract', 'value' => '2')
-                            )
-                         )),
-            array('2*2', array(
+                            'otherOperands' => [
+                                ['operator' => 'add', 'value' => '1'],
+                                ['operator' => 'subtract', 'value' => '2']
+                            ]
+                         ]],
+            ['2*2', [
                             'firstOperand' => '2',
-                            'otherOperands' => array(
-                                array('operator' => 'multiply', 'value' => '2'),
-                            )
-                         )),
-            array('2+3*4', array(
+                            'otherOperands' => [
+                                ['operator' => 'multiply', 'value' => '2'],
+                            ]
+                         ]],
+            ['2+3*4', [
                             'firstOperand' => '2',
-                            'otherOperands' => array(
-                                array('operator' => 'add', 'value' => '3*4'),
-                             )
-                         )),
-            array('4*3/2', array(
+                            'otherOperands' => [
+                                ['operator' => 'add', 'value' => '3*4'],
+                             ]
+                         ]],
+            ['4*3/2', [
                             'firstOperand' => '4',
-                            'otherOperands' => array(
-                                array('operator' => 'multiply', 'value' => '3'),
-                                array('operator' => 'divide', 'value' => '2'),
-                            )
-                         )),
-            array('4*(3+2)', array(
+                            'otherOperands' => [
+                                ['operator' => 'multiply', 'value' => '3'],
+                                ['operator' => 'divide', 'value' => '2'],
+                            ]
+                         ]],
+            ['4*(3+2)', [
                             'firstOperand' => '4',
-                            'otherOperands' => array(
-                                array('operator' => 'multiply', 'value' => '3+2'),
-                            )
-                         )),
-            array('4* (3+2) ', array(
+                            'otherOperands' => [
+                                ['operator' => 'multiply', 'value' => '3+2'],
+                            ]
+                         ]],
+            ['4* (3+2) ', [
                             'firstOperand' => '4',
-                            'otherOperands' => array(
-                                array('operator' => 'multiply', 'value' => '3+2'),
-                            )
-                         )),
-            array('4+( 3+2 ) ', array(
+                            'otherOperands' => [
+                                ['operator' => 'multiply', 'value' => '3+2'],
+                            ]
+                         ]],
+            ['4+( 3+2 ) ', [
                             'firstOperand' => '4',
-                            'otherOperands' => array(
-                                array('operator' => 'add', 'value' => '3+2'),
-                            )
-                         )),
-        );
+                            'otherOperands' => [
+                                ['operator' => 'add', 'value' => '3+2'],
+                            ]
+                         ]],
+        ];
     }
 
     public function mockOperandParser($expression) {
@@ -115,11 +115,11 @@ class OperatorParserTest extends PHPUnit_Framework_TestCase {
     }
 
     public function getUncorrectExpressions() {
-        return array(
-            array(' what ever '),
-            array('2 + '),
-            array(' 2 + ()')
-        );
+        return [
+            [' what ever '],
+            ['2 + '],
+            [' 2 + ()']
+        ];
     }
 
 }

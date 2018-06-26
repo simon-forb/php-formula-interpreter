@@ -12,8 +12,8 @@ namespace FormulaInterpreter\Command;
  *
  * @author mathieu
  */
-class OperationCommand implements CommandInterface {
-
+class OperationCommand implements CommandInterface
+{
     const ADD_OPERATOR = 'add';
     const SUBTRACT_OPERATOR = 'subtract';
     const MULTIPLY_OPERATOR = 'multiply';
@@ -27,23 +27,25 @@ class OperationCommand implements CommandInterface {
     /**
      * @var array
      */
-    protected $otherOperands = array();
+    protected $otherOperands = [];
 
-    function __construct(CommandInterface $firstOperand) {
+    public function __construct(CommandInterface $firstOperand)
+    {
         $this->firstOperand = $firstOperand;
     }
 
-    function addOperand($operator, CommandInterface $command) {
-        $this->otherOperands[] = array(
+    public function addOperand($operator, CommandInterface $command)
+    {
+        $this->otherOperands[] = [
             'operator' => $operator,
             'command' => $command
-        );
+        ];
     }
 
-    public function run() {
+    public function run()
+    {
         $result = $this->firstOperand->run();
         foreach ($this->otherOperands as $otherOperand) {
-
             $operator = $otherOperand['operator'];
             $command = $otherOperand['command'];
 
@@ -61,7 +63,6 @@ class OperationCommand implements CommandInterface {
                     $result = $result / $command->run();
                     break;
             }
-
         }
         return $result;
     }
@@ -78,5 +79,3 @@ class OperationCommand implements CommandInterface {
         return $parameters;
     }
 }
-
-?>

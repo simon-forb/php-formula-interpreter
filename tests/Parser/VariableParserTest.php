@@ -13,7 +13,7 @@ use FormulaInterpreter\Parser\ParserException;
  *
  * @author mathieu
  */
-class VariableParserTest extends PHPUnit_Framework_TestCase {
+class VariableParserTest extends \PHPUnit\Framework\TestCase {
     
     public function setUp() {
         $this->parser = new VariableParser();
@@ -28,14 +28,14 @@ class VariableParserTest extends PHPUnit_Framework_TestCase {
     }
     
     public function getCorrectExpressions() {
-        return array(
-            array('price', array('name' => 'price')),
-            array('rate', array('name' => 'rate')),
-            array(' rate ', array('name' => 'rate')),
-            array('with_underscore', array('name' => 'with_underscore')),
-            array('camelCase', array('name' => 'camelCase')),
-            array('rate2', array('name' => 'rate2')),
-        );
+        return [
+            ['price', ['name' => 'price']],
+            ['rate', ['name' => 'rate']],
+            [' rate ', ['name' => 'rate']],
+            ['with_underscore', ['name' => 'with_underscore']],
+            ['camelCase', ['name' => 'camelCase']],
+            ['rate2', ['name' => 'rate2']],
+        ];
     }
     
     /**
@@ -47,12 +47,12 @@ class VariableParserTest extends PHPUnit_Framework_TestCase {
     }
     
     public function getUncorrectExpressionData() {
-        return array(
-            array(''),
-            array('23'),
-            array('23 12'),
-            array(' some_function( '),
-        );
+        return [
+            [''],
+            ['23'],
+            ['23 12'],
+            [' some_function( '],
+        ];
     }
     
 }

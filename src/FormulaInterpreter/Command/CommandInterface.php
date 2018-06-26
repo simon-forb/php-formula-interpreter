@@ -12,13 +12,11 @@ namespace FormulaInterpreter\Command;
  *
  * @author mathieu
  */
-interface CommandInterface {
-
-    function run();
+interface CommandInterface
+{
+    public function run();
 
 //    static function create($options);
 
-    function getParameters();
+    public function getParameters();
 }
-
-?>

@@ -12,7 +12,8 @@ namespace FormulaInterpreter\Command;
  *
  * @author mathieu
  */
-class VariableCommand implements CommandInterface {
+class VariableCommand implements CommandInterface
+{
 
     /**
      * @var string
@@ -24,7 +25,8 @@ class VariableCommand implements CommandInterface {
      */
     protected $variables;
 
-    function __construct($name, $variables) {
+    public function __construct($name, $variables)
+    {
         if (!is_string($name)) {
             $message = sprintf(
                 'Parameter $name of method __construct() of class %s must be a string. Got %s type instead.',
@@ -46,8 +48,9 @@ class VariableCommand implements CommandInterface {
         $this->variables = $variables;
     }
 
-    public function run() {
-        if(!isset($this->variables[$this->name])) {
+    public function run()
+    {
+        if (!isset($this->variables[$this->name])) {
             throw new \FormulaInterpreter\Exception\UnknownVariableException($this->name);
         }
 
@@ -56,8 +59,6 @@ class VariableCommand implements CommandInterface {
 
     public function getParameters()
     {
-        return array($this->name);
+        return [$this->name];
     }
 }
-
-?>

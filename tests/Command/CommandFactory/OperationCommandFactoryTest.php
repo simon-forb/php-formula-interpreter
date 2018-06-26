@@ -14,7 +14,7 @@ use FormulaInterpreter\Command\CommandFactory\OperationCommandFactory;
  *
  * @author mathieu
  */
-class OperationCommandFactoryTest extends PHPUnit_Framework_TestCase {
+class OperationCommandFactoryTest extends \PHPUnit\Framework\TestCase {
 
     public function setUp() {
         $this->factory = new OperationCommandFactory($this->createCommandFactoryMock());
@@ -24,23 +24,23 @@ class OperationCommandFactoryTest extends PHPUnit_Framework_TestCase {
      *
      */
     public function testCreateWithOneOperand() {
-        $options = array(
-            'firstOperand' => array(2),
-        );
-        $this->assertEquals($this->factory->create($options), new OperationCommand(new OperationCommandFactoryTest_FakeCommand(array(2))));
+        $options = [
+            'firstOperand' => [2],
+        ];
+        $this->assertEquals($this->factory->create($options), new OperationCommand(new OperationCommandFactoryTest_FakeCommand([2])));
     }
 
     /**
      *
      */
     public function testCreateWithEmptyOthersOperands() {
-        $options = array(
-            'firstOperand' => array(2),
-            'otherOperands' => array(
-                array(),
-            ),
-        );
-        $this->assertEquals($this->factory->create($options), new OperationCommand(new OperationCommandFactoryTest_FakeCommand(array(2))));
+        $options = [
+            'firstOperand' => [2],
+            'otherOperands' => [
+                [],
+            ],
+        ];
+        $this->assertEquals($this->factory->create($options), new OperationCommand(new OperationCommandFactoryTest_FakeCommand([2])));
     }
 
 
@@ -49,15 +49,15 @@ class OperationCommandFactoryTest extends PHPUnit_Framework_TestCase {
      */
 
      public function testCreateWithTwoOperands() {
-        $options = array(
-            'firstOperand' => array(2),
-            'otherOperands' => array(
-                array('operator' => 'add', 'value' =>  array('3'))
-            )
-        );
+        $options = [
+            'firstOperand' => [2],
+            'otherOperands' => [
+                ['operator' => 'add', 'value' =>  ['3']]
+            ]
+        ];
 
-        $expected = new OperationCommand(new OperationCommandFactoryTest_FakeCommand(array(2)));
-        $expected->addOperand('add', new OperationCommandFactoryTest_FakeCommand(array(3)));
+        $expected = new OperationCommand(new OperationCommandFactoryTest_FakeCommand([2]));
+        $expected->addOperand('add', new OperationCommandFactoryTest_FakeCommand([3]));
 
         $this->assertEquals($this->factory->create($options), $expected);
     }
@@ -66,11 +66,11 @@ class OperationCommandFactoryTest extends PHPUnit_Framework_TestCase {
      * @expectedException FormulaInterpreter\Command\CommandFactory\CommandFactoryException
      */
     public function testCreateWithMissingFirstOperandOption() {
-        $this->factory->create(array());
+        $this->factory->create([]);
     }
 
     protected function createCommandFactoryMock() {
-        $operandFactory = $this->getMock('FormulaInterpreter\Command\CommandFactory\CommandFactoryInterface');
+        $operandFactory = $this->createMock('FormulaInterpreter\Command\CommandFactory\CommandFactoryInterface');
         $operandFactory->expects($this->any())
                 ->method('create')
                 ->will($this->returnCallback('OperationCommandFactoryTest::createFakeCommand'));
@@ -96,6 +96,6 @@ class OperationCommandFactoryTest_FakeCommand implements CommandInterface {
 
     public function getParameters()
     {
-        return array();
+        return [];
     }
 }
