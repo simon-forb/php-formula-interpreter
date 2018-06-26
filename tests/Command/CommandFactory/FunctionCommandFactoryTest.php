@@ -18,7 +18,7 @@ class FunctionCommandFactoryTest extends PHPUnit_Framework_TestCase {
 
     public function setUp() {
 
-        $this->argumentCommandFactory = $this->createMock(
+        $this->argumentCommandFactory = $this->getMock(
             'FormulaInterpreter\Command\CommandFactory\CommandFactoryInterface'
         );
         $this->factory = new FunctionCommandFactory($this->argumentCommandFactory);
@@ -41,7 +41,7 @@ class FunctionCommandFactoryTest extends PHPUnit_Framework_TestCase {
 
     public function testCreateWithArguments() {
 
-        $argumentCommand = $this->createMock(
+        $argumentCommand = $this->getMock(
             'FormulaInterpreter\Command\CommandInterface'
         );
         $this->argumentCommandFactory->expects($this->once())

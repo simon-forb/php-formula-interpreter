@@ -16,7 +16,7 @@ class OperatorParserTest extends PHPUnit_Framework_TestCase {
 
     public function setUp() {
 
-        $operandParser = $this->createMock('\FormulaInterpreter\Parser\ParserInterface');
+        $operandParser = $this->getMock('\FormulaInterpreter\Parser\ParserInterface');
         $operandParser
             ->expects($this->any())
             ->method('parse')

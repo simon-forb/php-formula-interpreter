@@ -15,7 +15,7 @@ use FormulaInterpreter\Parser\FunctionParser;
 class FunctionParserTest extends PHPUnit_Framework_TestCase {
 
     public function setUp() {
-        $argumentParser = $this->createMock('\FormulaInterpreter\Parser\ParserInterface');
+        $argumentParser = $this->getMock('\FormulaInterpreter\Parser\ParserInterface');
         $argumentParser
             ->expects($this->any())
             ->method('parse')

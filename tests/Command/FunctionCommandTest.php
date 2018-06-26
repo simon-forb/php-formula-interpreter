@@ -29,7 +29,7 @@ class FunctionCommandTest extends PHPUnit_Framework_TestCase {
           return $arg;
         };
 
-        $argumentCommand = $this->createMock('\FormulaInterpreter\Command\CommandInterface');
+        $argumentCommand = $this->getMock('\FormulaInterpreter\Command\CommandInterface');
         $argumentCommand->expects($this->once())
                 ->method('run')
                 ->will($this->returnValue(4));
@@ -46,7 +46,7 @@ class FunctionCommandTest extends PHPUnit_Framework_TestCase {
 
         $argumentCommands = array();
         foreach (array(2, 3) as $value) {
-            $argumentCommand = $this->createMock('\FormulaInterpreter\Command\CommandInterface');
+            $argumentCommand = $this->getMock('\FormulaInterpreter\Command\CommandInterface');
             $argumentCommand->expects($this->any())
                     ->method('run')
                     ->will($this->returnValue($value));
