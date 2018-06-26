@@ -106,6 +106,14 @@ $variables = [
 $executable->run($variables);
 ```
 
+## String support
+
+Variables can contain string. Use double quote (`"`) for denote a string.
+
+```php
+'a = "Hello world"'
+```
+
 # Using functions
 
 Here is an example of expression using a function :

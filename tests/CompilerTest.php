@@ -74,6 +74,10 @@ class CompilerTest extends \PHPUnit\Framework\TestCase
             ['(3 = 3) AND (4 < 1)', false],
             ['(3 = 3) OR (4 < 1)', true],
             ['(3 < 3) OR (4 < 1)', false],
+
+            //Support string
+            ['a = "Hello"', true, ['a' => "Hello"]],
+            ['a = "Hello"', false, ['a' => "World"]],
         ];
     }
 
