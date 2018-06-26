@@ -29,23 +29,35 @@ class OperatorParser implements ParserInterface
     public function parse($expression)
     {
         $expression = trim($expression);
-        
-        if ($this->hasOperator($expression, '+') | $this->hasOperator($expression, '-')) {
-            return $this->searchOperands($expression, ['+', '-']);
-        } elseif ($this->hasOperator($expression, '*') | $this->hasOperator($expression, '/')) {
-            return $this->searchOperands($expression, ['*', '/']);
-        } elseif ($this->hasOperator($expression, '=')) {
-            return $this->searchOperands($expression, ['=']);
+        $operatorsLevel = [
+            ['+', '-'],
+            ['*', '/'],
+            ['=', '!=', '<>', '>=', '>', '<=', '<'], //comparison
+            ['AND', 'OR'], //boolean
+        ];
+
+        foreach ($operatorsLevel as $operators) {
+            if ($this->hasOperators($expression, $operators)) {
+                return $this->searchOperands($expression, $operators);
+            }
         }
-        
         throw new ParserException($expression);
+    }
+
+    public function hasOperators($expression, $operators)
+    {
+        foreach ($operators as $operator) {
+            if ($this->hasOperator($expression, $operator)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     public function hasOperator($expression, $operator)
     {
         $parenthesis = 0;
-        
-        for ($i = 0; $i < strlen($expression); $i++) {
+        foreach (range(0, strlen($expression) - 1) as $i) {
             $substring = substr($expression, $i, strlen($operator));
             if ($substring == $operator && $parenthesis == 0) {
                 return true;
@@ -65,42 +77,41 @@ class OperatorParser implements ParserInterface
     public function searchOperands($expression, $operators)
     {
         $operands = [];
-        $nbrCharacters = strlen($expression);
-        
+        $exprLen = strlen($expression);
+
         $parenthesis = 0;
         
         $previous = 0;
         $lastOperator = null;
-        for ($i = 0; $i < $nbrCharacters; $i++) {
+        for ($i = 0; $i < $exprLen; $i++) {
             switch ($expression[$i]) {
                 case '(':
-                    $parenthesis ++;
+                    $parenthesis++;
                     break;
                 case ')':
-                    $parenthesis --;
+                    $parenthesis--;
                     break;
                 default:
-                    if (in_array($expression[$i], $operators) && $parenthesis == 0) {
-                        $operands[] = $this->createOperand(
-                            substr($expression, $previous, $i - $previous),
-                            $lastOperator
-                        );
-                        $lastOperator = $expression[$i];
-                        
-                        if ($i+1 < $nbrCharacters && $expression[$i+1] != '(') {
-                            $i++;
-                            $previous = $i;
-                        } else {
-                            $previous = $i+1;
-                        }
+                    $operator = self::catchOperatorFromPosition($expression, $i, $operators);
+                    if ($operator === null || $parenthesis !== 0) {
+                        break;
+                    }
+                    $opLen = strlen($operator);
+                    $subExpression = substr($expression, $previous, $i - $previous);
+                    $operands[] = $this->createOperand($subExpression, $lastOperator);
+                    $lastOperator = $operator;
+
+                    if ($i + $opLen < $exprLen && $expression[$i + $opLen] != '(') {
+                        $i += $opLen;
+                        $previous = $i;
+                    } else {
+                        $previous = $i + $opLen;
                     }
             }
         }
-        
-        $operands[] = $this->createOperand(
-                substr($expression, $previous, strlen($expression) - $previous),
-                $lastOperator
-        );
+
+        $subExpression = substr($expression, $previous, strlen($expression) - $previous);
+        $operands[] = $this->createOperand($subExpression, $lastOperator);
         
         $firstOperand = array_shift($operands);
         
@@ -111,22 +122,37 @@ class OperatorParser implements ParserInterface
         ];
     }
 
+    public static function catchOperatorFromPosition($expression, $position, $operators){
+        usort($operators, function ($a, $b) {
+            return strlen($a) < strlen($b);
+        });
+        foreach ($operators as $operator) {
+            $substr = substr($expression, $position, strlen($operator));
+            if ($substr === $operator) {
+                return $operator;
+            }
+        }
+        return null;
+    }
 
     public static function getOperatorConstant($operator)
     {
-        switch ($operator) {
-            case '+':
-                return OperationCommand::ADD_OPERATOR;
-            case '-':
-                return OperationCommand::SUBTRACT_OPERATOR;
-            case '*':
-                return OperationCommand::MULTIPLY_OPERATOR;
-            case '/':
-                return OperationCommand::DIVIDE_OPERATOR;
-            case '=':
-                return OperationCommand::EQUAL_OPERATOR;
-        }
-        return null;
+        $map = [
+            '+' => OperationCommand::ADD_OPERATOR,
+            '-' => OperationCommand::SUBTRACT_OPERATOR,
+            '*' => OperationCommand::MULTIPLY_OPERATOR,
+            '/' => OperationCommand::DIVIDE_OPERATOR,
+            '=' => OperationCommand::EQUAL_OPERATOR,
+            '!=' => OperationCommand::NOT_EQUAL_OPERATOR,
+            '<>' => OperationCommand::NOT_EQUAL_OPERATOR,
+            '>' => OperationCommand::GREATER_THAN_OPERATOR,
+            '>=' => OperationCommand::GREATER_THAN_OR_EQUAL_OPERATOR,
+            '<' => OperationCommand::LESS_THAN_OPERATOR,
+            '<=' => OperationCommand::LESS_THAN_OR_EQUAL_OPERATOR,
+            'AND' => OperationCommand::AND_OPERATOR,
+            'OR' => OperationCommand::OR_OPERATOR,
+        ];
+        return $map[$operator] ?? null;
     }
     
     public function createOperand($value, $operator = null)
@@ -137,10 +163,7 @@ class OperatorParser implements ParserInterface
         $value = trim($value);
         
         if ($value != '') {
-            if ($value[0] == '(' && substr($value, -1, 1) == ')') {
-                $value = substr($value, 1, -1);
-                $value = trim($value);
-            }
+            $value = self::cleanEnclosingParentheses($value);
         }
 
         if ($value == '') {
@@ -150,5 +173,14 @@ class OperatorParser implements ParserInterface
         
         $operand['value'] = $this->operandParser->parse($value);
         return $operand;
+    }
+
+    private static function cleanEnclosingParentheses($expression) {
+        $lastChar = substr($expression, -1, 1);
+        if ($expression[0] == '(' && $lastChar == ')') {
+            $expression = substr($expression, 1, -1);
+            $expression = trim($expression);
+        }
+        return $expression;
     }
 }
