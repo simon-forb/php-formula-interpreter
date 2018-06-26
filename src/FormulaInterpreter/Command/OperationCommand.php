@@ -18,6 +18,7 @@ class OperationCommand implements CommandInterface
     const SUBTRACT_OPERATOR = 'subtract';
     const MULTIPLY_OPERATOR = 'multiply';
     const DIVIDE_OPERATOR = 'divide';
+    const EQUAL_OPERATOR = 'equal';
 
     /**
      * @var CommandInterface
@@ -48,23 +49,27 @@ class OperationCommand implements CommandInterface
         foreach ($this->otherOperands as $otherOperand) {
             $operator = $otherOperand['operator'];
             $command = $otherOperand['command'];
-
-            switch ($operator) {
-                case self::ADD_OPERATOR:
-                    $result = $result + $command->run();
-                    break;
-                case self::MULTIPLY_OPERATOR:
-                    $result = $result * $command->run();
-                    break;
-                case self::SUBTRACT_OPERATOR:
-                    $result = $result - $command->run();
-                    break;
-                case self::DIVIDE_OPERATOR:
-                    $result = $result / $command->run();
-                    break;
-            }
+            $result = self::calculateResult($result, $operator, $command);
         }
         return $result;
+    }
+
+    private static function calculateResult($value, $operator, $command)
+    {
+        $value2 = $command->run();
+        switch ($operator) {
+            case self::ADD_OPERATOR:
+                return $value + $value2;
+            case self::MULTIPLY_OPERATOR:
+                return $value * $value2;
+            case self::SUBTRACT_OPERATOR:
+                return $value - $value2;
+            case self::DIVIDE_OPERATOR:
+                return $value / $value2;
+            case self::EQUAL_OPERATOR:
+                return $value == $value2;
+        }
+        return $value;
     }
 
     public function getParameters()

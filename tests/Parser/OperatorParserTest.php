@@ -43,7 +43,7 @@ class OperatorParserTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['2+2', [
-                            'firstOperand' => '2',
+                'firstOperand' => '2',
                             'otherOperands' => [
                                 ['operator' => 'add', 'value' => '2']
                              ]
@@ -60,6 +60,12 @@ class OperatorParserTest extends \PHPUnit\Framework\TestCase
                                 ['operator' => 'subtract', 'value' => '2']
                             ]
                          ]],
+            ['2=2', [
+                'firstOperand' => '2',
+                'otherOperands' => [
+                    ['operator' => 'equal', 'value' => '2']
+                ]
+            ]],
             ['3+1-2', [
                             'firstOperand' => '3',
                             'otherOperands' => [

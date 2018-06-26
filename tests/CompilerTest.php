@@ -34,6 +34,8 @@ class CompilerTest extends \PHPUnit\Framework\TestCase
         return [
             ['3', 3],
             ['3 + 3', 6],
+            ['3 = 3', true],
+            ['3 = 4', false],
             ['price', 10, ['price' => 10]],
             ['price + 2 * 3', 16, ['price' => 10]],
             ['pi()', pi()],

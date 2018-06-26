@@ -6,6 +6,7 @@
  */
 
 namespace FormulaInterpreter\Parser;
+use FormulaInterpreter\Command\OperationCommand;
 
 /**
  * Description of FunctionParser
@@ -33,6 +34,8 @@ class OperatorParser implements ParserInterface
             return $this->searchOperands($expression, ['+', '-']);
         } elseif ($this->hasOperator($expression, '*') | $this->hasOperator($expression, '/')) {
             return $this->searchOperands($expression, ['*', '/']);
+        } elseif ($this->hasOperator($expression, '=')) {
+            return $this->searchOperands($expression, ['=']);
         }
         
         throw new ParserException($expression);
@@ -43,12 +46,11 @@ class OperatorParser implements ParserInterface
         $parenthesis = 0;
         
         for ($i = 0; $i < strlen($expression); $i++) {
+            $substring = substr($expression, $i, strlen($operator));
+            if ($substring == $operator && $parenthesis == 0) {
+                return true;
+            }
             switch ($expression[$i]) {
-                case $operator:
-                    if ($parenthesis == 0) {
-                        return true;
-                    }
-                    break;
                 case '(':
                     $parenthesis ++;
                     break;
@@ -108,24 +110,29 @@ class OperatorParser implements ParserInterface
             'otherOperands' => $operands
         ];
     }
+
+
+    public static function getOperatorConstant($operator)
+    {
+        switch ($operator) {
+            case '+':
+                return OperationCommand::ADD_OPERATOR;
+            case '-':
+                return OperationCommand::SUBTRACT_OPERATOR;
+            case '*':
+                return OperationCommand::MULTIPLY_OPERATOR;
+            case '/':
+                return OperationCommand::DIVIDE_OPERATOR;
+            case '=':
+                return OperationCommand::EQUAL_OPERATOR;
+        }
+        return null;
+    }
     
     public function createOperand($value, $operator = null)
     {
         $operand = [];
-        switch ($operator) {
-            case '+':
-                $operand['operator'] = 'add';
-                break;
-            case '-':
-                $operand['operator'] = 'subtract';
-                break;
-            case '*':
-                $operand['operator'] = 'multiply';
-                break;
-            case '/':
-                $operand['operator'] = 'divide';
-                break;
-        }
+        $operand['operator'] = self::getOperatorConstant($operator);
         
         $value = trim($value);
         

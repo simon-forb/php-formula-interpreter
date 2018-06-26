@@ -49,6 +49,12 @@ You can use as many parentheses as you like.
 '2 * (2 * (3 + 2 * (3 + 2)) + 2)'
 ```
 
+Operator equality `=` will return boolean `true` or `false`.
+
+```php
+'1 = 1`
+```
+
 Others operators like modulo, power, etc. will be implemented in the future as functions.
 
 # Using variables
