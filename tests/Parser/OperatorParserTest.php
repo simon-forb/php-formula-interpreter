@@ -5,18 +5,22 @@
  * and open the template in the editor.
  */
 
+namespace Tests\FormulaInterpreter\Parser;
+
 use FormulaInterpreter\Parser\OperatorParser;
+use FormulaInterpreter\Parser\ParserException;
+use FormulaInterpreter\Parser\ParserInterface;
 
 /**
  * Description of OperatorParserTest
  *
  * @author mathieu
  */
-class OperatorParserTest extends \PHPUnit\Framework\TestCase {
-
-    public function setUp() {
-
-        $operandParser = $this->createMock('\FormulaInterpreter\Parser\ParserInterface');
+class OperatorParserTest extends \PHPUnit\Framework\TestCase
+{
+    public function setUp()
+    {
+        $operandParser = $this->createMock(ParserInterface::class);
         $operandParser
             ->expects($this->any())
             ->method('parse')
@@ -28,14 +32,15 @@ class OperatorParserTest extends \PHPUnit\Framework\TestCase {
     /**
      * @dataProvider getDataForTestingParse
      */
-    public function testParse($expression, $infos) {
+    public function testParse($expression, $infos)
+    {
         $infos['type'] = 'operation';
 
         $this->assertEquals($this->parser->parse($expression), $infos);
     }
 
-    public function getDataForTestingParse() {
-
+    public function getDataForTestingParse()
+    {
         return [
             ['2+2', [
                             'firstOperand' => '2',
@@ -102,26 +107,26 @@ class OperatorParserTest extends \PHPUnit\Framework\TestCase {
         ];
     }
 
-    public function mockOperandParser($expression) {
+    public function mockOperandParser($expression)
+    {
         return $expression;
     }
 
     /**
-     * @expectedException FormulaInterpreter\Parser\ParserException
      * @dataProvider getUncorrectExpressions
      */
-    public function testParseUncorrectExpression($expression) {
+    public function testParseUncorrectExpression($expression)
+    {
+        $this->expectException(ParserException::class);
         $this->parser->parse($expression);
     }
 
-    public function getUncorrectExpressions() {
+    public function getUncorrectExpressions()
+    {
         return [
             [' what ever '],
             ['2 + '],
             [' 2 + ()']
         ];
     }
-
 }
-
-?>

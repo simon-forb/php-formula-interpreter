@@ -5,6 +5,9 @@
  * and open the template in the editor.
  */
 
+namespace Tests\FormulaInterpreter\Command\CommandFactory;
+
+use FormulaInterpreter\Command\CommandFactory\CommandFactoryException;
 use FormulaInterpreter\Command\NumericCommand;
 use FormulaInterpreter\Command\CommandFactory\NumericCommandFactory;
 
@@ -13,32 +16,31 @@ use FormulaInterpreter\Command\CommandFactory\NumericCommandFactory;
  *
  * @author mathieu
  */
-class NumericCommandFactoryTest extends \PHPUnit\Framework\TestCase {
+class NumericCommandFactoryTest extends \PHPUnit\Framework\TestCase
+{
     
     /**
      *  @dataProvider getData
      */
-    public function testCreate($value) {
+    public function testCreate($value)
+    {
         $factory = new NumericCommandFactory();
         $options = ['value' => $value];
         $this->assertEquals($factory->create($options), new NumericCommand($value));
     }
     
-    public function getData() {
+    public function getData()
+    {
         return [
             ['2'],
             ['4'],
         ];
     }
     
-    /**
-     * @expectedException FormulaInterpreter\Command\CommandFactory\CommandFactoryException
-     */
-    public function testCreateWithMissingValueOption() {
+    public function testCreateWithMissingValueOption()
+    {
+        $this->expectException(CommandFactoryException::class);
         $factory = new NumericCommandFactory();
         $factory->create([]);
     }
-    
 }
-
-?>

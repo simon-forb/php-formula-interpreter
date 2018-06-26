@@ -5,6 +5,8 @@
  * and open the template in the editor.
  */
 
+namespace Tests\FormulaInterpreter\Command;
+
 use FormulaInterpreter\Command\OperationCommand;
 
 /**
@@ -12,13 +14,14 @@ use FormulaInterpreter\Command\OperationCommand;
  *
  * @author mathieu
  */
-class OperationCommandTest extends \PHPUnit\Framework\TestCase {
+class OperationCommandTest extends \PHPUnit\Framework\TestCase
+{
 
     /**
      *
      */
-    public function testRunWithOneOperand() {
-
+    public function testRunWithOneOperand()
+    {
         $firstOperand = $this->createMockCommand(12);
 
         $command = new OperationCommand($firstOperand);
@@ -29,8 +32,8 @@ class OperationCommandTest extends \PHPUnit\Framework\TestCase {
     /**
      *
      */
-    public function testRunWithAddition() {
-
+    public function testRunWithAddition()
+    {
         $firstOperand = $this->createMockCommand(2);
         $command = new OperationCommand($firstOperand);
 
@@ -43,8 +46,8 @@ class OperationCommandTest extends \PHPUnit\Framework\TestCase {
     /**
      *
      */
-    public function testRunWithMultplication() {
-
+    public function testRunWithMultplication()
+    {
         $firstOperand = $this->createMockCommand(3);
         $command = new OperationCommand($firstOperand);
 
@@ -57,8 +60,8 @@ class OperationCommandTest extends \PHPUnit\Framework\TestCase {
     /**
      *
      */
-    public function testRunWithSubstraction() {
-
+    public function testRunWithSubstraction()
+    {
         $firstOperand = $this->createMockCommand(2);
         $command = new OperationCommand($firstOperand);
 
@@ -71,8 +74,8 @@ class OperationCommandTest extends \PHPUnit\Framework\TestCase {
     /**
      *
      */
-    public function testRunWithDivision() {
-
+    public function testRunWithDivision()
+    {
         $firstOperand = $this->createMockCommand(6);
         $command = new OperationCommand($firstOperand);
 
@@ -80,14 +83,13 @@ class OperationCommandTest extends \PHPUnit\Framework\TestCase {
         $command->addOperand(OperationCommand::DIVIDE_OPERATOR, $operand);
 
         $this->assertEquals($command->run(), 3);
-
     }
 
     /**
      *
      */
-    public function testRunWithThreeOperands() {
-
+    public function testRunWithThreeOperands()
+    {
         $firstOperand = $this->createMockCommand(5);
         $command = new OperationCommand($firstOperand);
 
@@ -101,15 +103,12 @@ class OperationCommandTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals($command->run(), 14);
     }
 
-    public function createMockCommand($returnValue) {
+    public function createMockCommand($returnValue)
+    {
         $command = $this->createMock('FormulaInterpreter\Command\CommandInterface');
         $command->expects($this->any())
             ->method('run')
             ->will($this->returnValue($returnValue));
         return $command;
     }
-
-
 }
-
-?>

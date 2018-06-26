@@ -5,6 +5,8 @@
  * and open the template in the editor.
  */
 
+namespace Tests\FormulaInterpreter\Parser;
+
 use FormulaInterpreter\Parser\VariableParser;
 use FormulaInterpreter\Parser\ParserException;
 
@@ -13,21 +15,24 @@ use FormulaInterpreter\Parser\ParserException;
  *
  * @author mathieu
  */
-class VariableParserTest extends \PHPUnit\Framework\TestCase {
-    
-    public function setUp() {
+class VariableParserTest extends \PHPUnit\Framework\TestCase
+{
+    public function setUp()
+    {
         $this->parser = new VariableParser();
     }
 
     /**
      * @dataProvider getCorrectExpressions
      */
-    public function testParseCorrectExpression($expression, $infos) {
+    public function testParseCorrectExpression($expression, $infos)
+    {
         $infos['type'] = 'variable';
         $this->assertEquals($this->parser->parse($expression), $infos);
     }
     
-    public function getCorrectExpressions() {
+    public function getCorrectExpressions()
+    {
         return [
             ['price', ['name' => 'price']],
             ['rate', ['name' => 'rate']],
@@ -39,14 +44,16 @@ class VariableParserTest extends \PHPUnit\Framework\TestCase {
     }
     
     /**
-     * @expectedException FormulaInterpreter\Parser\ParserException
      * @dataProvider getUncorrectExpressionData
      */
-    public function testParseUncorrectExpression($expression) {
+    public function testParseUncorrectExpression($expression)
+    {
+        $this->expectException(ParserException::class);
         $this->parser->parse($expression);
     }
     
-    public function getUncorrectExpressionData() {
+    public function getUncorrectExpressionData()
+    {
         return [
             [''],
             ['23'],
@@ -54,7 +61,4 @@ class VariableParserTest extends \PHPUnit\Framework\TestCase {
             [' some_function( '],
         ];
     }
-    
 }
-
-?>

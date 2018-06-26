@@ -5,6 +5,8 @@
  * and open the template in the editor.
  */
 
+namespace Tests\FormulaInterpreter;
+
 use FormulaInterpreter\Compiler;
 use FormulaInterpreter\Parser\ParserException;
 
@@ -13,20 +15,22 @@ use FormulaInterpreter\Parser\ParserException;
  *
  * @author mathieu
  */
-class CompilerTest extends \PHPUnit\Framework\TestCase {
+class CompilerTest extends \PHPUnit\Framework\TestCase
+{
 
     /**
      * @dataProvider getCompileAndRunData
      */
-    public function testCompileAndRun($expression, $result, $variables = []) {
+    public function testCompileAndRun($expression, $result, $variables = [])
+    {
         $compiler = new Compiler();
 
         $executable = $compiler->compile($expression);
         $this->assertEquals($executable->run($variables), $result);
-
     }
 
-    public function getCompileAndRunData() {
+    public function getCompileAndRunData()
+    {
         return [
             ['3', 3],
             ['3 + 3', 6],

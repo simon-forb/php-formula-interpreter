@@ -5,36 +5,40 @@
  * and open the template in the editor.
  */
 
+namespace Tests\FormulaInterpreter\Parser;
+
 use FormulaInterpreter\Parser\FunctionParser;
+use FormulaInterpreter\Parser\ParserException;
 
 /**
  * Description of ParserTest
  *
  * @author mathieu
  */
-class FunctionParserTest extends \PHPUnit\Framework\TestCase {
-
-    public function setUp() {
+class FunctionParserTest extends \PHPUnit\Framework\TestCase
+{
+    public function setUp()
+    {
         $argumentParser = $this->createMock('\FormulaInterpreter\Parser\ParserInterface');
         $argumentParser
             ->expects($this->any())
             ->method('parse')
             ->will($this->returnCallback([$this, 'mockArgumentParser']));
         $this->parser = new FunctionParser($argumentParser);
-
     }
 
     /**
      * @dataProvider getCorrectExpressions
      */
-    public function testParseWithCorrecrExpression($expression, $infos) {
-
+    public function testParseWithCorrecrExpression($expression, $infos)
+    {
         $infos['type'] = 'function';
 
         $this->assertEquals($this->parser->parse($expression), $infos);
     }
 
-    public function getCorrectExpressions() {
+    public function getCorrectExpressions()
+    {
         return [
             ['pi()', ['name' => 'pi']],
             ['do_this()', ['name' => 'do_this']],
@@ -50,23 +54,24 @@ class FunctionParserTest extends \PHPUnit\Framework\TestCase {
     }
 
     /**
-     * @expectedException FormulaInterpreter\Parser\ParserException
      * @dataProvider getUncorrectExpressions
      */
-    public function testParseUncorrectExpression($expression) {
+    public function testParseUncorrectExpression($expression)
+    {
+        $this->expectException(ParserException::class);
         $this->parser->parse($expression);
     }
 
-    public function getUncorrectExpressions() {
+    public function getUncorrectExpressions()
+    {
         return [
             [' what ever '],
             [' what_ever( '],
         ];
     }
 
-    public function mockArgumentParser($expression) {
+    public function mockArgumentParser($expression)
+    {
         return $expression;
     }
 }
-
-?>

@@ -5,6 +5,8 @@
  * and open the template in the editor.
  */
 
+namespace Tests\FormulaInterpreter\Parser;
+
 use FormulaInterpreter\Parser\NumericParser;
 use FormulaInterpreter\Parser\ParserException;
 
@@ -13,21 +15,24 @@ use FormulaInterpreter\Parser\ParserException;
  *
  * @author mathieu
  */
-class NumericParserTest extends \PHPUnit\Framework\TestCase {
-    
-    public function setUp() {
+class NumericParserTest extends \PHPUnit\Framework\TestCase
+{
+    public function setUp()
+    {
         $this->parser = new NumericParser();
     }
     
     /**
      * @dataProvider getIntegerValue
      */
-    public function testParseInteger($expression, $infos) {
+    public function testParseInteger($expression, $infos)
+    {
         $infos['type'] = 'numeric';
         $this->assertEquals($this->parser->parse($expression), $infos);
     }
     
-    public function getIntegerValue() {
+    public function getIntegerValue()
+    {
         return [
             ['2', ['value' => 2]],
             ['2.4', ['value' => 2.4]],
@@ -36,14 +41,16 @@ class NumericParserTest extends \PHPUnit\Framework\TestCase {
     }
     
     /**
-     * @expectedException FormulaInterpreter\Parser\ParserException
      * @dataProvider getUncorrectExpressionData
      */
-    public function testParseUncorrectExpression($expression) {
+    public function testParseUncorrectExpression($expression)
+    {
+        $this->expectException(ParserException::class);
         $this->parser->parse($expression);
     }
     
-    public function getUncorrectExpressionData() {
+    public function getUncorrectExpressionData()
+    {
         return [
             ['mlksdf'],
             ['MLKmlm'],
@@ -52,7 +59,4 @@ class NumericParserTest extends \PHPUnit\Framework\TestCase {
             ['2.23.23']
         ];
     }
-    
 }
-
-?>

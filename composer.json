@@ -25,7 +25,10 @@
             "FormulaInterpreter": "src/"
         }
     },
-
+    "autoload-dev": {
+        "psr-0": {
+            "Tests\\FormulaInterpreter": "tests/"
+        }
+    },
     "minimum-stability": "dev"
-
 }

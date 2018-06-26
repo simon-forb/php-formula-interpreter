@@ -5,25 +5,32 @@
  * and open the template in the editor.
  */
 
+namespace Tests\FormulaInterpreter\Command\CommandFactory;
+
+use FormulaInterpreter\Command\CommandFactory\CommandFactoryException;
+use FormulaInterpreter\Command\CommandFactory\CommandFactoryInterface;
 use FormulaInterpreter\Command\OperationCommand;
 use FormulaInterpreter\Command\CommandInterface;
 use FormulaInterpreter\Command\CommandFactory\OperationCommandFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of OperationCommandFactory
  *
  * @author mathieu
  */
-class OperationCommandFactoryTest extends \PHPUnit\Framework\TestCase {
-
-    public function setUp() {
+class OperationCommandFactoryTest extends TestCase
+{
+    public function setUp()
+    {
         $this->factory = new OperationCommandFactory($this->createCommandFactoryMock());
     }
 
     /**
      *
      */
-    public function testCreateWithOneOperand() {
+    public function testCreateWithOneOperand()
+    {
         $options = [
             'firstOperand' => [2],
         ];
@@ -33,7 +40,8 @@ class OperationCommandFactoryTest extends \PHPUnit\Framework\TestCase {
     /**
      *
      */
-    public function testCreateWithEmptyOthersOperands() {
+    public function testCreateWithEmptyOthersOperands()
+    {
         $options = [
             'firstOperand' => [2],
             'otherOperands' => [
@@ -48,7 +56,8 @@ class OperationCommandFactoryTest extends \PHPUnit\Framework\TestCase {
      *
      */
 
-     public function testCreateWithTwoOperands() {
+    public function testCreateWithTwoOperands()
+    {
         $options = [
             'firstOperand' => [2],
             'otherOperands' => [
@@ -62,37 +71,39 @@ class OperationCommandFactoryTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals($this->factory->create($options), $expected);
     }
 
-    /**
-     * @expectedException FormulaInterpreter\Command\CommandFactory\CommandFactoryException
-     */
-    public function testCreateWithMissingFirstOperandOption() {
+    public function testCreateWithMissingFirstOperandOption()
+    {
+        $this->expectException(CommandFactoryException::class);
         $this->factory->create([]);
     }
 
-    protected function createCommandFactoryMock() {
-        $operandFactory = $this->createMock('FormulaInterpreter\Command\CommandFactory\CommandFactoryInterface');
+    protected function createCommandFactoryMock()
+    {
+        $operandFactory = $this->createMock(CommandFactoryInterface::class);
         $operandFactory->expects($this->any())
                 ->method('create')
-                ->will($this->returnCallback('OperationCommandFactoryTest::createFakeCommand'));
+                ->will($this->returnCallback([OperationCommandFactoryTest::class, 'createFakeCommand']));
         return $operandFactory;
-
     }
 
-    static function createFakeCommand($options) {
+    public static function createFakeCommand($options)
+    {
         return new OperationCommandFactoryTest_FakeCommand($options);
     }
-
 }
 
-class OperationCommandFactoryTest_FakeCommand implements CommandInterface {
-
+class OperationCommandFactoryTest_FakeCommand implements CommandInterface
+{
     protected $options;
 
-    function __construct($options) {
+    public function __construct($options)
+    {
         $this->options = $options;
     }
 
-    public function run() {}
+    public function run()
+    {
+    }
 
     public function getParameters()
     {

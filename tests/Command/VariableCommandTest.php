@@ -5,41 +5,48 @@
  * and open the template in the editor.
  */
 
+namespace Tests\FormulaInterpreter\Command;
+
 use FormulaInterpreter\Command\VariableCommand;
+use FormulaInterpreter\Exception\UnknownVariableException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of ParserTest
  *
  * @author mathieu
  */
-class VariableCommandTest extends \PHPUnit\Framework\TestCase {
+class VariableCommandTest extends TestCase
+{
 
     /**
      * @dataProvider getData
      */
-    public function testRunWhenVariablesExists($name, $variables, $result) {
+    public function testRunWhenVariablesExists($name, $variables, $result)
+    {
         $command = new VariableCommand($name, $variables);
 
         $this->assertEquals($command->run(), $result);
     }
 
-    public function getData() {
+    public function getData()
+    {
         return [
             ['rate', ['rate' => 2], 2],
             ['price', ['price' => 32.2], 32.2],
         ];
     }
 
-    /**
-     * @expectedException FormulaInterpreter\Exception\UnknownVariableException
-     */
-    public function testRunWhenVariableNotExists() {
+    public function testRunWhenVariableNotExists()
+    {
+        $this->expectException(UnknownVariableException::class);
         $command = new VariableCommand('rate', []);
         $command->run();
     }
 
-    public function testRunWhenVariablesHolderImplementsArrayAccess() {
-        $variables = $this->createMock('\ArrayAccess');
+    public function testRunWhenVariablesHolderImplementsArrayAccess()
+    {
+        $variables = $this->createMock(\ArrayAccess::class);
         $variables->expects($this->any())
             ->method('offsetExists')
             ->with($this->equalTo('rate'))
@@ -55,39 +62,40 @@ class VariableCommandTest extends \PHPUnit\Framework\TestCase {
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      * @dataProvider getIncorrectNames
      */
-    public function testInjectIncorrectName($name) {
+    public function testInjectIncorrectName($name)
+    {
+        $this->expectException(\InvalidArgumentException::class);
         $command = new VariableCommand($name, []);
     }
 
-    public function getIncorrectNames() {
+    public function getIncorrectNames()
+    {
         return [
             [12],
-            [False],
+            [false],
             [[]],
-            [new StdClass()],
+            [new \stdClass()],
         ];
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      * @dataProvider getIncorrectVariables
      */
-    public function testInjectIncorrectVariables($variables) {
+    public function testInjectIncorrectVariables($variables)
+    {
+        $this->expectException(\InvalidArgumentException::class);
         $command = new VariableCommand('rate', $variables);
     }
 
-    public function getIncorrectVariables() {
+    public function getIncorrectVariables()
+    {
         return [
             [12],
-            [False],
+            [false],
             ['string'],
-            [new StdClass()],
+            [new \stdClass()],
         ];
     }
-
 }
-
-?>
