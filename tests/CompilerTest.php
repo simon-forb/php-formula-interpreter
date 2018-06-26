@@ -43,6 +43,10 @@ class CompilerTest extends PHPUnit_Framework_TestCase {
             // Issue #4
             array('(((100 * 0.43075) * 1.1 * 1.5) / (1-0.425)) * 1.105', 136.5852065217),
             array('1+(1+1)', 3),
+
+            // Issue 8
+            array('pow(foo,bar)', 9, array('foo' => 3, 'bar' => 2)),
+            array('pow(foo, bar)', 9, array('foo' => 3, 'bar' => 2)),
         );
     }
 
