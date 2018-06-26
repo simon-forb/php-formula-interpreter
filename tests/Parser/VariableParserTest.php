@@ -40,6 +40,7 @@ class VariableParserTest extends \PHPUnit\Framework\TestCase
             ['with_underscore', ['name' => 'with_underscore']],
             ['camelCase', ['name' => 'camelCase']],
             ['rate2', ['name' => 'rate2']],
+            ['with.dot', ['name' => 'with.dot']],
         ];
     }
     

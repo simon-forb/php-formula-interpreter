@@ -60,6 +60,11 @@ class Compiler
             return $a % $b;
         });
     }
+
+    public function registerFunction($name, callable $callable)
+    {
+        $this->functionCommandFactory->registerFunction($name, $callable);
+    }
     
     /**
      * Compile an expression and return the corresponding executable

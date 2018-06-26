@@ -18,7 +18,7 @@ class VariableParser implements ParserInterface
     {
         $expression = trim($expression);
         
-        if (!preg_match('/^([a-zA-Z_]+[0-9]*)+$/', $expression)) {
+        if (!preg_match('/^([a-zA-Z_]+[0-9\.]*)+$/', $expression)) {
             throw new ParserException($expression);
         }
         

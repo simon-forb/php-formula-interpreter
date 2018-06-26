@@ -62,10 +62,21 @@ A variable is just a word inside your formula like this :
 Just before executing a formula, make sure to inject all the required variables in an array
 
 ```
-$variables = array(
+$variables = [
    'price' => 40.2,
    'rate' => 12.8
-);
+];
+
+$executable->run($variables);
+```
+
+Variables now supports dot `.` as the name.
+
+```php
+$variables = [
+   'user.name' => 'John Doe'
+   'user.age' => '23'
+];
 
 $executable->run($variables);
 ```
@@ -84,6 +95,23 @@ You can embed functions as much as you like
 
 ```php
    'pow(sqrt(4), 2)'
+```
+
+## Custom functions
+
+Now function can be added before compiling should you want to add more variables.
+
+```php
+$compiler = new Compiler();
+$compiler->registerFunction('foobar', function ($a, $b) {
+    return $a + $b;
+});
+$executable = $compiler->compile("foobar(foo, bar)");
+$params = [
+    'foo' => 1,
+    'bar' => 2
+];
+$executable->run($params);
 ```
 
 # Listing parameters
