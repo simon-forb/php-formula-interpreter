@@ -78,6 +78,10 @@ class CompilerTest extends \PHPUnit\Framework\TestCase
             //Support string
             ['a = "Hello"', true, ['a' => "Hello"]],
             ['a = "Hello"', false, ['a' => "World"]],
+            ['a = "Hello - World"', true, ['a' => "Hello - World"]],
+            ['(a = "Hello") AND (b = "Hello World")', false, ['a' => "World", 'b' => "Hello World"]],
+            ['(a = "Hello") AND (b = "Hello - World")', false, ['a' => "World", 'b' => "Hello - World"]],
+            ['(a = "Hello") AND (b = "Hello - World")', true, ['a' => "Hello", 'b' => "Hello - World"]],
         ];
     }
 
