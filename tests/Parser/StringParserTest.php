@@ -44,6 +44,7 @@ class StringParserTest extends TestCase
             ['"Hello"', ['value' => "Hello"]],
             ['"Hello, World!"', ['value' => "Hello, World!"]],
             ['"Hello, \"World!\""', ['value' => 'Hello, "World!"']],
+            ['"Hello - World"', ['value' => 'Hello - World']],
         ];
     }
     

@@ -57,9 +57,10 @@ class OperatorParser implements ParserInterface
     public function hasOperator($expression, $operator)
     {
         $parenthesis = 0;
+        $quotes = 0;
         foreach (range(0, strlen($expression) - 1) as $i) {
             $substring = substr($expression, $i, strlen($operator));
-            if ($substring == $operator && $parenthesis == 0) {
+            if ($substring == $operator && $parenthesis == 0 && $quotes == 0) {
                 return true;
             }
             switch ($expression[$i]) {
@@ -68,6 +69,9 @@ class OperatorParser implements ParserInterface
                     break;
                 case ')':
                     $parenthesis --;
+                    break;
+                case '"':
+                    $quotes = $quotes > 0 ? 0 : 1;
                     break;
             }
         }
@@ -82,6 +86,7 @@ class OperatorParser implements ParserInterface
         $parenthesis = 0;
         
         $previous = 0;
+        $quotes = 0;
         $lastOperator = null;
         for ($i = 0; $i < $exprLen; $i++) {
             switch ($expression[$i]) {
@@ -91,9 +96,12 @@ class OperatorParser implements ParserInterface
                 case ')':
                     $parenthesis--;
                     break;
+                case '"':
+                    $quotes = $quotes > 0 ? 0 : 1;
+                    break;
                 default:
                     $operator = self::catchOperatorFromPosition($expression, $i, $operators);
-                    if ($operator === null || $parenthesis !== 0) {
+                    if ($operator === null || $parenthesis !== 0 || $quotes !== 0) {
                         break;
                     }
                     $opLen = strlen($operator);
