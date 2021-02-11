@@ -12,7 +12,6 @@
     ],
     "require": {
         "php": "^7.0",
-        "mormat/php-formula-interpreter": "1.*"
     },
     "require-dev": {
         "phing/phing": "~2.16.1",
