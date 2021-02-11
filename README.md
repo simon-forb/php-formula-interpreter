@@ -3,7 +3,7 @@ php-formula-interpreter
 
 A formula interpreter for php
 
-# Why this library ?
+## Why this library ?
 
 Some user could wants to perform a simple calculation and being able to change it as much as he can. Before using a library, you could use the `eval` function. But this method has two major drawbacks :
 
@@ -12,7 +12,16 @@ Some user could wants to perform a simple calculation and being able to change i
 - Complexity. Php is also complex for someone who doesn't understand programming language. It could be nice to interpret an excel-like formula instead.
 
 
-# How does it work ?
+## Installing
+
+Use Composer to install it:
+
+```
+composer require khumbal/php-formula-interpreter
+```
+
+
+## How does it work ?
 
 First, create an instance of `FormulaInterpreter\Compiler`
 
@@ -32,6 +41,8 @@ Finally run the formula from the executable :
 $result = $executable->run();
 // $result equals 4
 ```
+
+
 
 # Using operators
 
