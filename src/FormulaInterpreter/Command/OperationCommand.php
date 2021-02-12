@@ -7,6 +7,9 @@
 
 namespace FormulaInterpreter\Command;
 
+use Exception;
+use FormulaInterpreter\Exception\InvalidVariableException;
+
 /**
  * Description of FunctionParser
  *
@@ -65,9 +68,13 @@ class OperationCommand implements CommandInterface
     {
         $result = $this->firstOperand->run();
         foreach ($this->otherOperands as $otherOperand) {
-            $operator = $otherOperand['operator'];
-            $command = $otherOperand['command'];
-            $result = self::calculateResult($result, $operator, $command);
+            try {
+                $operator = $otherOperand['operator'];
+                $command = $otherOperand['command'];
+                $result = self::calculateResult($result, $operator, $command);
+            } catch (\Throwable $th) {
+                throw new InvalidVariableException(  $command->getParameters()[0],  $command->run() );
+            }
         }
         return $result;
     }
