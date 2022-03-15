@@ -17,7 +17,7 @@ Some user could wants to perform a simple calculation and being able to change i
 Use Composer to install it:
 
 ```
-composer require khumbal/php-formula-interpreter
+composer require simon-forb/php-formula-interpreter
 ```
 
 
